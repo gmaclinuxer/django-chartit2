@@ -8,8 +8,31 @@ from django.utils import six
 
 from .exceptions import APIInputError
 
+def get_all_field_names(meta):
+    """
+        Taken from Django 1.9.8 b/c this is unofficial API
+        which has been deprecated in 1.10.
+    """
+    names = set()
+    fields = meta.get_fields()
+    for field in fields:
+        # For backwards compatibility GenericForeignKey should not be
+        # included in the results.
+        if field.is_relation and field.many_to_one and \
+           field.related_model is None:
+            continue
+        # Relations to child proxy models should not be included.
+        if (field.model != meta.model and
+                field.model._meta.concrete_model == meta.concrete_model):
+            continue
 
-def _validate_field_lookup_term(model, term):
+        names.add(field.name)
+        if hasattr(field, 'attname'):
+            names.add(field.attname)
+    return list(names)
+
+
+def _validate_field_lookup_term(model, term, query):
     """Checks whether the term is a valid field_lookup for the model.
 
     **Args**:
@@ -25,9 +48,14 @@ def _validate_field_lookup_term(model, term):
     - APIInputError: If the term supplied is not a valid field lookup
       parameter for the model.
     """
+    # if this is an extra or annotated field then return
+    if term in query.annotations.keys() or term in query.extra.keys():
+        return term
+
     # TODO: Memoization for speed enchancements?
     terms = term.split('__')
-    model_fields = model._meta.get_all_field_names()
+    # model_fields = model._meta.get_all_field_names()
+    model_fields = get_all_field_names(model._meta)
     if terms[0] not in model_fields:
         raise APIInputError("Field %r does not exist. Valid lookups are %s."
                             % (terms[0], ', '.join(model_fields)))
@@ -52,7 +80,7 @@ def _validate_field_lookup_term(model, term):
         else:
             m = field_details[0].model
 
-        return _validate_field_lookup_term(m, '__'.join(terms[1:]))
+        return _validate_field_lookup_term(m, '__'.join(terms[1:]), query)
 
 
 def _clean_source(source):
@@ -91,7 +119,7 @@ def _clean_categories(categories, source):
         if c in source.query.aggregates.keys() or c in source.query.extra.keys():
             field_aliases[c] = c
         else:
-            field_aliases[c] = _validate_field_lookup_term(source.model, c)
+            field_aliases[c] = _validate_field_lookup_term(source.model, c, source.query)
     return categories, field_aliases
 
 
@@ -109,7 +137,7 @@ def _clean_legend_by(legend_by, source):
                             % (legend_by, type(legend_by)))
     field_aliases = {}
     for lg in legend_by:
-        field_aliases[lg] = _validate_field_lookup_term(source.model, lg)
+        field_aliases[lg] = _validate_field_lookup_term(source.model, lg, source.query)
     return legend_by, field_aliases
 
 
@@ -285,7 +313,7 @@ def clean_dps(series):
             except KeyError:
                 raise APIInputError("%s is missing the 'source' key." % td)
             td.setdefault('field', tk)
-            fa = _validate_field_lookup_term(td['source'].model, td['field'])
+            fa = _validate_field_lookup_term(td['source'].model, td['field'], td['source'].query)
             # If the user supplied term is not a field name, use it as an alias
             if tk != td['field']:
                 fa = tk
