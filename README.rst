@@ -13,7 +13,7 @@ Django-Highcharts
   :target: https://coveralls.io/github/grantmcconnaughey/django-chartit2?branch=master
 
 
-The fork of Django Charit2 and merge Django Chart new feature that adds support for Python 3 and Django 1.8+!
+The fork of Django Charit2 and merge Django Chartit new feature that adds support for Python 3 and Django 1.8+!
 
 Django Chartit is a Django app that can be used to easily create charts from the data
 in your database. The charts are rendered using ``Highcharts`` and ``jQuery``
@@ -36,7 +36,7 @@ Features
 - Plot only a top few items per category in a pivot chart.
 
 =============================================
-Improvements from the original Django-Chartit
+Improvements from the original Django-Chartit2
 =============================================
 
 - Added Python 3 compatibility
@@ -44,6 +44,7 @@ Improvements from the original Django-Chartit
 - Added documentation to ReadTheDocs
 - Added automated testing via Travis CI
 - Added test coverage tracking via Coveralls
+- Added annotate support from Django-Chartit
 
 ============
 Installation
