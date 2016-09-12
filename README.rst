@@ -52,7 +52,7 @@ Installation
 
 You can install Django-Highcharts from PyPI. Just do ::
 
-    $ pip install django-highcharts
+    $ pip install django-highchartit
 
 You also need supporting JavaScript libraries. See the
 `Required JavaScript Libraries`_ section for more details.
