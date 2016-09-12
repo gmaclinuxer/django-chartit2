@@ -1,6 +1,10 @@
 Changelog
 =========
 
+* 0.2.3 (September 12, 2016)
+    * Initial release from django-chartit2 and django-chartit
+    * Fixed annotate key validation issue
+
 * 0.2.2 (January 28, 2016)
     * Fixed another issue that prevented installation via PyPI
 
