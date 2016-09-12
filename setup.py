@@ -11,7 +11,7 @@ def read(*parts):
 
 
 def get_version(*file_paths):
-    """Get the django-highcharts version without importing the module."""
+    """Get the django-highchartit version without importing the module."""
     version_file = read(*file_paths)
     version_match = re.search(r"^__version__ = ['\"]([^'\"]*)['\"]",
                               version_file, re.M)
@@ -21,7 +21,7 @@ def get_version(*file_paths):
 
 
 setup(
-    name='django-highcharts',
+    name='django-highchartit',
     version=get_version('chartit', '__init__.py'),
     packages=find_packages(exclude=["chartit_tests.*", "demoproject.*",
                                     "chartit_tests", "demoproject",

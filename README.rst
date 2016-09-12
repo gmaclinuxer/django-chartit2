@@ -1,5 +1,5 @@
 ##################
-Django-Highcharts
+Django-Highchartit
 ##################
 
 .. image:: https://readthedocs.org/projects/django-chartit2/badge/?version=latest
