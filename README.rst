@@ -261,7 +261,7 @@ The following JavaScript Libraries are required for using Django-Highcharts.
 - `jQuery <http://jquery.com>`_
 - `Highcharts <http://highcharts.com>`_
 
-.. note:: While ``Django-Chartit 2`` itself is licensed under the BSD license,
+.. note:: While ``Django-Chartit`` and ``Django-Chartit 2`` itself is licensed under the BSD license,
    ``Highcharts`` is licensed under the `Highcharts license
    <http://www.highcharts.com/license>`_ and ``jQuery`` is licensed under both
    MIT License and GNU General Public License (GPL) Version 2. It is your own
